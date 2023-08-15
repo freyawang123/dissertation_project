@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>1</title>
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+		<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+		<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			#map {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				width: 100%;
+			}
+
+			.controls {
+				position: absolute;
+				top: 50px;
+				left: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<style>
+			#features {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 50%;
+				overflow: auto;
+				background: rgba(255, 255, 255, 0.8);
+			}
+
+			#map canvas {
+				cursor: crosshair;
+			}
+		</style>
+		<div id="map"></div>
+		<!-- <pre id="features"></pre> -->
+		<div class="controls">
+			<select id="layer-select" onchange="showLayer(this.value)">
+				<option style="color: black;">--Please select--</option>
+				<option value="old-poi-cja684" style="color: black;">old-poi-cja684</option>
+				<option value="old-15-lsoa-br0gnk" style="color: black;">old-15-lsoa-br0gnk</option>
+				<!-- <option value="housing_shp-89k0ag" style="color: black;">housing_shp-89k0ag</option> -->
+			</select>
+
+		</div>
+		<script>
+			mapboxgl.accessToken =
+				'pk.eyJ1IjoiZnJleWF3YW5nMTIzIiwiYSI6ImNsZDFtZXNmbDAwM2Uzdm4zOGdyZGk4MWUifQ.KhKFJj1Jow68AzjZNSiUrg';
+			const map = new mapboxgl.Map({
+				container: 'map',
+				style: 'mapbox://styles/freyawang123/clkqxulul00eh01pedce4gzk9',
+				center: [-0.1806, 51.52],
+				zoom: 13
+			});
+
+			function showLayer(attribute) {
+				map.setLayoutProperty('old-poi-cja684', 'visibility', 'none')
+				map.setLayoutProperty('old-15-lsoa-br0gnk', 'visibility', 'none')
+				//map.setLayoutProperty('housing_shp-89k0ag', 'visibility', 'none')
+				map.setLayoutProperty(attribute, 'visibility', 'visible')
+			};
+			map.on('click', (e) => {
+				// 
+				console.log(e.lngLat);
+
+				const features = map.queryRenderedFeatures(e.point);
+
+				const displayProperties = [
+					'type',
+					'properties',
+					'id',
+					'layer',
+					'source',
+					'sourceLayer',
+					'state'
+				];
+
+				const displayFeatures = features.map((feat) => {
+					const displayFeat = {};
+					displayProperties.forEach((prop) => {
+						displayFeat[prop] = feat[prop];
+					});
+					return displayFeat;
+				});
+
+				//console.log(displayFeatures)
+
+				displayFeatures.forEach((item, index) => {
+					console.log(item)
+					if (item.layer.id === "old-poi-cja684") {
+						var ESTATE = item.properties.ESTATE
+						//var ID = item.properties.ID
+						var OBJECTID = item.properties.OBJECTID
+						//var Shape_STAr = item.properties.Shape_STAr
+						//var Shape_STLe = item.properties.Shape_STLe
+						var description =
+							`<strong>${ESTATE}</strong><p>OBJECTID:${OBJECTID}<br/></p>` //Shape_STAr:${Shape_STAr}<br/>Shape_STLe:${Shape_STLe}<br/>//ID:${ID}<br/>
+						new mapboxgl.Popup()
+							.setLngLat(e.lngLat)
+							.setHTML(description)
+							.addTo(map);
+					}
+					if (item.layer.id === "old-15-lsoa-br0gnk") {
+						console.log(item.properties.LSOA11CD)
+						var LSOA11CD = item.properties.LSOA11CD
+						var id = item.properties.id
+						var pop = item.properties.pop
+						var travel_time = item.properties.travel_time
+						//var y = item.properties.y
+						var description =
+							`<strong>${LSOA11CD}</strong><p>id:${id}<br/>pop:${pop}<br/>travel_time:${travel_time}<br/></p>` //y:${y}<br/>
+						new mapboxgl.Popup()
+							.setLngLat(e.lngLat)
+							.setHTML(description)
+							.addTo(map);
+					}
+					if (item.layer.id === "housing_shp-89k0ag") {
+						//console.log(item.properties.id)
+						var Name = item.properties.Name
+						var id = item.properties.id
+						var Type = item.properties.Type
+						//var x = item.properties.x
+						//var y = item.properties.y
+						var description =
+							`<strong>${id}</strong><p>Name:${Name}<br/>Type:${Type}<br/></p>` //x:${x}<br/>y:${y}<br/>
+						new mapboxgl.Popup()
+							.setLngLat(e.lngLat)
+							.setHTML(description)
+							.addTo(map);
+					}
+				})
+			})
+			map.on('load', function() {
+				{
+					map.addSource('states', {
+						'type': 'geojson',
+						'data': 'acc_new.geojson'
+					});
+				} {
+					map.addLayer({
+						id: 'basemap-4nntq5',
+						type: 'fill',
+						source: {
+							type: 'vector',
+							url: 'mapbox://freyawang123.c4fyyvo8' // Mapbox tileset Map ID
+						},
+						'source-layer': 'basemap-4nntq5', // name of tilesets
+						paint: {
+							"fill-color": "hsl(40, 100%, 50%)",
+							'fill-opacity': 0.4,
+							"fill-outline-color": "hsl(343, 91%, 45%)"
+						}
+					});
+				} {
+					map.addLayer({
+						id: 'old-poi-cja684',
+						type: 'fill-extrusion',
+						source: {
+							type: 'vector',
+							url: 'mapbox://freyawang123.650gwm8o' // Mapbox tileset Map ID
+						},
+						'source-layer': 'old_poi-cja684', // name of tilesets
+						'layout': {
+							'visibility': 'none'
+						},
+						paint: {
+							"fill-extrusion-color": "hsl(280, 100%, 60%)",
+							"fill-extrusion-height": [
+								"interpolate",
+								[
+									"linear"
+								],
+								[
+									"zoom"
+								],
+								0,
+								0,
+								22,
+								0
+							],
+							"fill-extrusion-opacity": 0.4
+						}
+					});
+				} {
+					map.addLayer({
+						id: 'old-15-lsoa-br0gnk',
+						type: 'fill',
+						source: {
+							type: 'vector',
+							url: 'mapbox://freyawang123.0989ans9' // Mapbox tileset Map ID
+						},
+						'source-layer': 'old_15_lsoa-br0gnk', // name of tilesets
+						'layout': {
+							'visibility': 'none'
+						},
+						paint: {
+							"fill-color": "hsl(180, 13%, 71%)",
+							"fill-outline-color": "hsl(285, 100%, 44%)",
+							"fill-opacity": 0.4
+						}
+					});
+				} {
+					map.addLayer({
+						id: 'housing_shp-89k0ag',
+						type: 'circle',
+						source: {
+							type: 'vector',
+							url: 'mapbox://freyawang123.ap8rzea0' // Mapbox tileset Map ID
+						},
+						'source-layer': 'housing_shp-89k0ag', // name of tilesets
+						paint: {
+							"circle-color": "hsl(0, 73%, 47%)",
+							"circle-opacity": 1
+						}
+					});
+				}
+			})
+		</script>
+
+	</body>
+</html>

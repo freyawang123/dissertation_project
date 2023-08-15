@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Swipe between maps</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+  <style>
+    #legend {
+      background-size: 100% 100%;
+      background-color: rgba(240, 248, 255, 0.8);
+      opacity: 1;
+      padding: 10px 20px 30px 20px;
+      margin-bottom: 40px;
+      line-height: 20px;
+      min-height: 140px;
+      position: absolute;
+      bottom: 0px;
+      left: 20px;
+      z-index: 1;
+      /* width: 140px; */
+    }
+
+    #legend h3 {
+      color: rgb(0, 0, 0);
+    }
+
+    #legend span {
+      color: rgb(0, 0, 0);
+    }
+
+    .legend-key {
+      display: inline-block;
+      width: 100px;
+      height: 20px;
+      margin-bottom: 10px;
+      margin-right: 5px;
+      border: 1px solid #111;
+    }
+
+    #layer-select {
+      width: 240px;
+      height: 30px;
+    }
+
+    .map-overlay1 {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+
+    #Rightlegend {
+      background-size: 100% 100%;
+      background-color: rgba(240, 248, 255, 0.8);
+      opacity: 1;
+      padding: 10px 20px 30px 20px;
+      margin-bottom: 40px;
+      line-height: 20px;
+      min-height: 140px;
+      /* width: 140px; */
+    }
+
+    #Rightlegend h3 {
+      color: rgb(0, 0, 0);
+    }
+
+    #Rightlegend span {
+      color: rgb(0, 0, 0);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .mapboxgl-ctrl-top-right {
+      top: 10px !important;
+      right: 10px !important;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 40px;
+      /* left: 10px; */
+      line-height: 20px;
+      width: 300px;
+      padding: 16px 14px 16px 20px;
+      border-radius: 5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+      overflow: hidden;
+      /* Add this line to prevent the content from showing outside */
+      background-image: url(fd-images/bg.png);
+      background-color: rgba(255, 255, 255, 0);
+      background-size: 100% 100%;
+
+    }
+
+
+    .keychip {
+      padding-left: 4px;
+      border-left: 15px solid #333;
+      margin-top: 4px;
+      color: white;
+    }
+
+    .slider {
+      width: 100%;
+      margin: 10px 0;
+      /* Set the color of the slider track */
+      background-color: #ffffff;
+
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    button {
+      /* background-color: rgba(255, 255, 255, 0);
+      background-image: url(fd-images/button3.png);
+      background-size: 100% 100%; */
+      border: none;
+      color: #000;
+      padding: 5px 9px;
+      /* Update the padding to change the button size */
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 12px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      opacity: 0.8;
+    }
+
+
+    button:hover {
+      opacity: 1;
+    }
+
+    .toggleFeatures {
+      position: absolute;
+      top: 100px;
+      left: 10px;
+      z-index: 2;
+    }
+
+    #comparison-container {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #features {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 20%;
+      font-family: sans-serif;
+      overflow-y: scroll;
+      background-color: #fafafa;
+      padding-bottom: 20px;
+      /* Add this line */
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+    }
+
+    .hidden {
+      display: none !important;
+      opacity: 0;
+    }
+
+
+    table {
+      margin: 10px 0;
+    }
+
+    section {
+      padding: 25px 50px;
+      line-height: 25px;
+      border-bottom: 1px solid #ddd;
+      opacity: 0.25;
+      font-size: 13px;
+      scroll-snap-align: start;
+      height: 100vh;
+      overflow-anchor: none;
+    }
+
+    section.active {
+      opacity: 1;
+    }
+
+    section:last-child {
+      border-bottom: none;
+      margin-bottom: 200px;
+    }
+
+    #panel_control.overlay {
+      top: 9px;
+      height: 24px;
+      width: 80px;
+      padding: 0;
+      background: rgba(255, 255, 255, 0);
+      background-size: 100% 100%;
+      background-image: url(fd-images/hide.png);
+      opacity: 0.8;
+    }
+
+    #panel_control.overlay:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+
+
+    #new-overlay {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+      line-height: 20px;
+      width: 260px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .compare-swiper-vertical {
+      background-color: rgba(255, 255, 255, 0) !important;
+      background-image: url(fd-images/Switching.png) !important;
+      background-size: 100% 100% !important;
+    }
+
+    #year {
+      color: white;
+    }
+  </style>
+
+</head>
+
+<body>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+  <link rel="stylesheet"
+    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
+  <div id="panel_control" class='overlay open'></div>
+  <div class='map-overlay2' id='legend'></div>
+  <div class='map-overlay1' id='Rightlegend'></div>
+  <div id="overlay" class="overlay" style="display:none;">
+    <strong style="font-size: 20px;color: white;">Land Use</strong></p>
+    <div id="2007" class="keychip" style="border-color: #d9d9d9;">2007</div>
+    <div id="2009" class="keychip" style="border-color: #e0f3db;">2009</div>
+    <div id="2011" class="keychip" style="border-color: #ccebc5">2011</div>
+    <div id="2013" class="keychip" style="border-color: #a8ddb5;">2013</div>
+    <div id="2015" class="keychip" style="border-color: #7bccc4;">2015</div>
+    <div id="2017" class="keychip" style="border-color: #4eb3d3;">2017</div>
+    <div id="2019" class="keychip" style="border-color: #2b8cbe;">2019</div>
+    <div id="2021" class="keychip" style="border-color: #08589e;">2021</div>
+    <table>
+      <tr>
+        <td>
+          <input id='slider' type='range' min='0' max='8' step='1' value='0' list='tickmarks' />
+          <datalist id="tickmarks">
+            <option value="0" label="&nbsp;">
+            <option value="1" label="2007">
+            <option value="2">
+            <option value="3">
+            <option value="4">
+            <option value="5">
+            <option value="6">
+            <option value="7">
+            <option value="8" label="2021">
+          </datalist>
+        </td>
+        <td>
+          <label id='year'></label>
+        </td>
+      </tr>
+    </table>
+
+    <div class="buttons">
+      <button id="startButton">Start</button>
+      <button id="stopButton">Stop</button>
+      <button id="location1">Canary Wharf</button>
+      <button id="location2">Stratford</button>
+      <button id="toggleFeatures">Story</button>
+    </div>
+  </div>
+
+  </div>
+  <div id="new-overlay" class="overlay hidden">
+    <button id="back-to-land-use">Back to Land Use</button>
+  </div>
+  <div id="comparison-container">
+    <div id="before" class="map"></div>
+    <div id="after" class="map">
+
+    </div>
+  </div>
+  <div class="overlay" style="width:450px;left:50px;">
+    <button id="time_Cancer" class="leftbtn">time_Cancer</button>
+    <button id="time_dep3" class="leftbtn">time_dep3</button>
+    <button id="time_dep4" class="leftbtn">time_dep4</button>
+    <button id="time_mental" class="leftbtn">time_mental</button>
+    <button id="time_obesity" class="leftbtn">time_obesity</button>
+  </div>
+
+  <div class="overlay" style="width:450px;right:150px;display: none;">
+    <button id="Anxiety" class="rightbtn">Anxiety</button>
+    <button id="count_cancer" class="rightbtn">count_cancer</button>
+    <button id="count_dep3" class="rightbtn">count_dep3</button>
+    <button id="count_dep4" class="rightbtn">count_dep4</button>
+    <button id="count_obesity" class="rightbtn">count_obesity</button>
+    <button id="Depression" class="rightbtn">Depression</button>
+    <button id="Hypertension" class="rightbtn">Hypertension</button>
+    <button id="MentalHealth" class="rightbtn">MentalHealth</button>
+    <button id="travel_time" class="rightbtn">travel_time</button>
+  </div>
+  <div id="map" style="width: 100%;"></div>
+  <div id="features">
+    <section id="baker" class="active">
+      <h3>221b Baker St.</h3>
+      <p>
+        A
+      </p>
+    </section>
+    <section id="aldgate">
+      <h3>Aldgate Station</h3>
+      <p>
+        B
+      </p>
+    </section>
+    <section id="london-bridge">
+      <h3>London Bridge</h3>
+      <p>
+        C
+      </p>
+    </section>
+    <section id="woolwich">
+      <h3>Woolwich Arsenal</h3>
+      <p>
+        D
+      </p>
+    </section>
+    <section id="gloucester">
+      <h3>Gloucester Road</h3>
+      <p>
+        E
+      </p>
+    </section>
+    <section id="caulfield-gardens">
+      <h3>13 Caulfield Gardens</h3>
+      <p>
+        F
+      </p>
+    </section>
+    <section id="telegraph">
+      <h3>The Daily Telegraph</h3>
+      <p>
+        F
+      </p>
+    </section>
+    <section id="charing-cross">
+      <h3>Charing Cross Hotel</h3>
+      <p>
+        G
+      </p>
+      <small id="citation">
+        Adapted from
+        <a href="http://www.gutenberg.org/files/2346/2346-h/2346-h.htm">Project Gutenberg</a>
+      </small>
+    </section>
+  </div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZnJleWF3YW5nMTIzIiwiYSI6ImNsZDFtZXNmbDAwM2Uzdm4zOGdyZGk4MWUifQ.KhKFJj1Jow68AzjZNSiUrg';
+    let rightCus = 'Anxiety';
+    let leftCus = 'time_Cancer'
+    const beforeMap = new mapboxgl.Map({
+      container: 'before',
+      style: 'mapbox://styles/freyawang123/clkugtk7m000801oj9yku6xff',
+      //style:"mapbox://styles/freyawang123/clkrpvqnt009s01ohfedo8z3w",
+      center: [-0.1478, 51.5074],
+      zoom: 14,
+      pitch: 0
+    }).on('load', function () {
+
+
+
+      // Update the showValue function
+      function showValue(currentValue) {
+        if (currentValue === null) {
+          years.forEach((year) => {
+            const layerIdDog = `footprint-dog_${year}`;
+            const layerIdStratford = `footprint-stratford_${year}`;
+
+            beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+            beforeMap.setLayoutProperty(layerIdStratford, 'visibility', 'none');
+          });
+        } else {
+          const currentYearIndex = years.indexOf(currentValue);
+
+          years.forEach((year, index) => {
+            const layerIdDog = `footprint-dog_${year}`;
+            const layerIdStratford = `footprint-stratford_${year}`;
+
+            if (index <= currentYearIndex) {
+              beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+              beforeMap.setLayoutProperty(layerIdStratford, 'visibility', 'visible');
+            } else {
+              beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+              beforeMap.setLayoutProperty(layerIdStratford, 'visibility', 'none');
+            }
+          });
+        }
+      }
+
+
+      const time_Cancervalues = [
+        -1, 0.0002692884, 0.0004700306, 0.0006511883, 0.0008274498, 0.0010232959, 0.0012387266, 0.0014688458, 0.0016451073, 0.0019976303
+      ];
+
+      const time_CancercolorMap = {
+        "-1": "#E0E2FF",
+        "0.0002692884": "#D5D7FD",
+        "0.0004700306": "#B8B9F1",
+        "0.0006511883": "#999FE1",
+        "0.0008274498": "#7C85D5",
+        "0.0010232959": "#6577C7",
+        "0.0012387266": "#4F64BA",
+        "0.0014688458": "#3858AD",
+        "0.0014688458": "#294DA4",
+        "0.0016451073": "#1D4398",
+        "0.0019976303": "#113B8F",
+      };
+
+      time_Cancervalues.forEach((value) => {
+        beforeMap.addLayer({
+          'id': `time_Cancer-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.duik5if4'
+          },
+          'source-layer': 'acc_new-298dio',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': time_CancercolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'time_Cancer', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      const time_dep3values = [
+        -1, 0.001002131, 0.002025359, 0.002879808, 0.003670964, 0.004535961, 0.006498027, 0.008607777, 0.010633136, 0.016234520
+      ];
+
+      const time_dep3colorMap = {
+        "-1": "#E0E2FF",
+        "0.001002131": "#D5D7FD",
+        "0.002025359": "#B8B9F1",
+        "0.002879808": "#999FE1",
+        "0.003670964": "#7C85D5",
+        "0.004535961": "#6577C7",
+        "0.006498027": "#4F64BA",
+        "0.008607777": "#3858AD",
+        "0.010633136": "#294DA4",
+        "0.016234520": "#1D4398",
+      };
+
+      time_dep3values.forEach((value) => {
+
+        beforeMap.addLayer({
+          'id': `time_dep3-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.duik5if4'
+          },
+          'source-layer': 'acc_new-298dio',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': time_dep3colorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'time_dep3', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const time_dep4values = [
+        -1, 0.00007384122, 0.0002215237, 0.0004114011, 0.000664571, 0.0009493871, 0.001234203, 0.001476824, 0.001856579, 0.002426212
+      ];
+
+      const time_dep4colorMap = {
+        "-1": "#E0E2FF",
+        "0.00007384122": "#D5D7FD",
+        "0.0002215237": "#B8B9F1",
+        "0.0004114011": "#999FE1",
+        "0.000664571": "#7C85D5",
+        "0.0009493871": "#6577C7",
+        "0.001234203": "#4F64BA",
+        "0.001476824": "#3858AD",
+        "0.001856579": "#294DA4",
+        "0.002426212": "#1D4398",
+      };
+
+      time_dep4values.forEach((value) => {
+
+        beforeMap.addLayer({
+          'id': `time_dep4-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.duik5if4'
+          },
+          'source-layer': 'acc_new-298dio',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': time_dep4colorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'time_dep4', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const time_mentalvalues = [
+        -1, 0.0008396902, 0.0012938083, 0.0018654341, 0.0022913994, 0.0027504137, 0.0032045319, 0.0039071298, 0.0051164795, 0.0056721928
+      ];
+
+      const time_mentalcolorMap = {
+        "-1": "#E0E2FF",
+        "0.0008396902": "#D5D7FD",
+        "0.0012938083": "#B8B9F1",
+        "0.0018654341": "#999FE1",
+        "0.0022913994": "#7C85D5",
+        "0.0027504137": "#6577C7",
+        "0.0032045319": "#4F64BA",
+        "0.0039071298": "#3858AD",
+        "0.0051164795": "#294DA4",
+        "0.0056721928": "#1D4398",
+      };
+
+      time_mentalvalues.forEach((value) => {
+
+        beforeMap.addLayer({
+          'id': `time_mental-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.duik5if4'
+          },
+          'source-layer': 'acc_new-298dio',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': time_mentalcolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'time_mental', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      const time_obesityvalues = [
+        -1, 0.0005483691, 0.0009547498, 0.0013023766, 0.0017038611, 0.0021004495, 0.0026732993, 0.0032902145, 0.0037700375, 0.0046856180
+      ];
+
+      const time_obesitycolorMap = {
+        "-1": "#E0E2FF",
+        "0.0005483691": "#D5D7FD",
+        "0.0009547498": "#B8B9F1",
+        "0.0013023766": "#999FE1",
+        "0.0017038611": "#7C85D5",
+        "0.0021004495": "#6577C7",
+        "0.0026732993": "#4F64BA",
+        "0.0032902145": "#3858AD",
+        "0.0037700375": "#294DA4",
+        "0.0046856180": "#1D4398",
+      };
+
+      time_obesityvalues.forEach((value) => {
+
+        beforeMap.addLayer({
+          'id': `time_obesity-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.duik5if4'
+          },
+          'source-layer': 'acc_new-298dio',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': time_obesitycolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'time_obesity', value] // Use the value from the list for the filter
+        });
+
+      });
+        
+          {
+        beforeMap.addLayer({
+          id: 'final_poi-5qkmxm',
+          type: 'circle',
+          source: {
+            type: 'vector',
+            url: 'mapbox://freyawang123.dkf1v66z' // Mapbox tileset Map ID
+          },
+          'source-layer': 'final_poi-5qkmxm', // name of tilesets
+          'layout': {
+          },
+          paint: {
+            "circle-color": "hsl(0, 73%, 47%)",
+            "circle-opacity": 1
+          }
+        });
+      }
+
+      function allLeftHide() {
+        time_Cancervalues.forEach((year, index) => {
+          const layerIdDog = `time_Cancer-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        time_dep3values.forEach((year, index) => {
+          const layerIdDog = `time_dep3-${year}`;
+
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        time_dep4values.forEach((year, index) => {
+          const layerIdDog = `time_dep4-${year}`;
+
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        time_mentalvalues.forEach((year, index) => {
+          const layerIdDog = `time_mental-${year}`;
+
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        time_obesityvalues.forEach((year, index) => {
+          const layerIdDog = `time_obesity-${year}`;
+
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+
+
+      }
+      // Add the input event listener for the slider
+      const slider = document.getElementById('slider');
+      slider.addEventListener('input', () => {
+        const currentSliderValue = parseInt(slider.value);
+
+        if (currentSliderValue === 0) {
+          document.getElementById('year').textContent = '';
+          showValue(null);
+        } else {
+          const currentYear = years[currentSliderValue - 1];
+          showValue(currentYear);
+          document.getElementById('year').textContent = currentYear;
+        }
+      });
+
+      // Add the toggleValue function
+      function toggleValue(value) {
+        const layerId = `footprint-${value}`;
+        const currentVisibility = beforeMap.getLayoutProperty(layerId, 'visibility');
+
+        if (currentVisibility === 'visible') {
+          beforeMap.setLayoutProperty(layerId, 'visibility', 'none');
+        } else {
+          beforeMap.setLayoutProperty(layerId, 'visibility', 'visible');
+        }
+      }
+
+
+
+
+      const years = [2007, 2009, 2011, 2013, 2015, 2017, 2019, 2021];
+
+      years.forEach((year) => {
+        // Get the button with the corresponding year ID
+        const button = document.getElementById(year.toString());
+
+        // Add the click event listener to the button
+        button.addEventListener("click", () => {
+          toggleValue(`dog_${year}`);
+          toggleValue(`stratford_${year}`);
+        });
+      });
+
+
+      const location1Button = document.getElementById("location1");
+      location1Button.addEventListener("click", () => {
+        beforeMap.flyTo({ center: [-0.02299806326513476, 51.503], zoom: 13.3 });
+      });
+
+      const location2Button = document.getElementById("location2");
+      location2Button.addEventListener("click", () => {
+        beforeMap.flyTo({ center: [-0.01426062887264834, 51.545765676754], zoom: 13.3 });
+      });
+
+
+
+      // Add variables for the animation
+      let animation;
+      let animationRunning = false;
+
+      // Add the animateSlider function
+      function animateSlider() {
+        const slider = document.getElementById("slider");
+        const maxSliderValue = parseInt(slider.max);
+
+        if (parseInt(slider.value) < maxSliderValue) {
+          slider.value = parseInt(slider.value) + 1;
+          slider.dispatchEvent(new Event("input"));
+          animation = setTimeout(animateSlider, 1000); // Adjust the duration between updates (1000 ms = 1 second)
+        } else {
+          clearTimeout(animation);
+          animationRunning = false;
+        }
+      }
+
+      // Add the event listener for the Start button
+      const startButton = document.getElementById("startButton");
+      startButton.addEventListener("click", () => {
+        if (!animationRunning) {
+          animationRunning = true;
+          animateSlider();
+        }
+      });
+
+      // Add the event listener for the Stop button
+      const stopButton = document.getElementById("stopButton");
+      stopButton.addEventListener("click", () => {
+        clearTimeout(animation);
+        animationRunning = false;
+      });
+      const time_CancerButton = document.getElementById("time_Cancer");
+      time_CancerButton.addEventListener("click", () => {
+        leftCus = "time_Cancer"
+        allLeftHide()
+        time_Cancervalues.forEach((year, index) => {
+          const layerIdDog = `time_Cancer-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const time_dep3Button = document.getElementById("time_dep3");
+      time_dep3Button.addEventListener("click", () => {
+        leftCus = "time_dep3"
+        allLeftHide()
+        time_dep3values.forEach((year, index) => {
+          const layerIdDog = `time_dep3-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const time_dep4Button = document.getElementById("time_dep4");
+      time_dep4Button.addEventListener("click", () => {
+        leftCus = "time_dep4"
+        allLeftHide()
+        time_dep4values.forEach((year, index) => {
+          const layerIdDog = `time_dep4-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const time_mentalButton = document.getElementById("time_mental");
+      time_mentalButton.addEventListener("click", () => {
+        leftCus = "time_mental"
+        allLeftHide()
+        time_dep4values.forEach((year, index) => {
+          const layerIdDog = `time_dep4-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const time_obesityButton = document.getElementById("time_obesity");
+      time_obesityButton.addEventListener("click", () => {
+        leftCus = "time_obesity"
+        allLeftHide()
+        time_obesityvalues.forEach((year, index) => {
+          const layerIdDog = `time_obesity-${year}`;
+          beforeMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+
+
+      updateLegend(leftCus)
+      function updateLegend(attribute) {
+        let legend = document.getElementById('legend');
+        legend.innerHTML = '';
+
+
+        // legend.innerHTML = `<h3>${attribute}</h3>`;
+        for (var item in time_CancercolorMap) {
+          console.log(item)
+          let key1 = document.createElement('span');
+          key1.className = 'legend-key';
+          key1.style.backgroundColor = time_CancercolorMap[item];
+
+
+          let legendItem = document.createElement('div');
+          legendItem.appendChild(key1);
+          legend.appendChild(legendItem);
+        }
+
+      }
+    });
+
+    const afterMap = new mapboxgl.Map({
+      container: 'after',
+      style: 'mapbox://styles/freyawang123/clkugciku000b01rgckej2vee',
+      center: [-0.1478, 51.5074],
+      zoom: 14,
+      pitch: 0
+    }).on('load', function () {
+
+      const AnxietyButton = document.getElementById("Anxiety");
+      AnxietyButton.addEventListener("click", () => {
+        rightCus = "Anxiety";
+        allRightHide()
+        Anxietyvalues.forEach((year, index) => {
+          const layerIdDog = `Anxiety-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+
+      });
+      const count_cancerButton = document.getElementById("count_cancer");
+      count_cancerButton.addEventListener("click", () => {
+        rightCus = "count_cancer"
+        allRightHide()
+        count_cancervalues.forEach((year, index) => {
+          const layerIdDog = `count_cancer-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+
+      });
+
+      const count_dep3Button = document.getElementById("count_dep3");
+      count_dep3Button.addEventListener("click", () => {
+        rightCus = "count_dep3"
+        allRightHide()
+        count_dep3values.forEach((year, index) => {
+          const layerIdDog = `count_dep3-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+
+      });
+      const count_dep4Button = document.getElementById("count_dep4");
+      count_dep4Button.addEventListener("click", () => {
+        rightCus = "count_dep4"
+        allRightHide()
+        count_dep4values.forEach((year, index) => {
+          const layerIdDog = `count_dep4-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const count_obesityButton = document.getElementById("count_obesity");
+      count_obesityButton.addEventListener("click", () => {
+        rightCus = "count_obesity"
+        allRightHide()
+        count_obesityvalues.forEach((year, index) => {
+          const layerIdDog = `count_obesity-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const DepressionButton = document.getElementById("Depression");
+      DepressionButton.addEventListener("click", () => {
+        rightCus = "Depression"
+        allRightHide()
+        Depressionvalues.forEach((year, index) => {
+          const layerIdDog = `Depression-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const HypertensionButton = document.getElementById("Hypertension");
+      HypertensionButton.addEventListener("click", () => {
+        rightCus = "Hypertension"
+        allRightHide()
+        Hypertensionvalues.forEach((year, index) => {
+          const layerIdDog = `Hypertension-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const MentalHealthButton = document.getElementById("MentalHealth");
+      MentalHealthButton.addEventListener("click", () => {
+        rightCus = "MentalHealth"
+        allRightHide()
+        MentalHealthvalues.forEach((year, index) => {
+          const layerIdDog = `MentalHealth-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+      const travel_timeButton = document.getElementById("travel_time");
+      travel_timeButton.addEventListener("click", () => {
+        rightCus = "travel_time"
+        allRightHide()
+        travel_timevalues.forEach((year, index) => {
+          const layerIdDog = `travel_time-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'visible');
+        });
+      });
+
+      const Anxietyvalues = [
+        0, 87, 88, 89, 90, 91, 92, 93
+      ];
+
+      const AnxietycolorMap = {
+        "0": "#113B8F",
+        "87": "#1D4398",
+        "88": "#294DA4",
+        "89": "#3858AD",
+        "90": "#4F64BA",
+        "91": "#6577C7",
+        "92": "#7C85D5",
+        "93": "#999FE1",
+        "94": "#B8B9F1",
+        "95": "#D5D7FD"
+      };
+
+      Anxietyvalues.forEach((value) => {
+        afterMap.addLayer({
+          'id': `Anxiety-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': AnxietycolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'Anxiety', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      const count_cancervalues = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const count_cancercolorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      count_cancervalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `count_cancer-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': count_cancercolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'count_cancer', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const count_dep3values = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const count_dep3colorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      count_dep3values.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `count_dep3-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': count_dep3colorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'count_dep3', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const count_dep4values = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const count_dep4colorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      count_dep4values.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `count_dep4-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': count_dep4colorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'count_dep4', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      const count_obesityvalues = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const count_obesitycolorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      count_obesityvalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `count_obesity-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': count_obesitycolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'count_obesity', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const Depressionvalues = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const DepressioncolorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      Depressionvalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `Depression-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': DepressioncolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'Depression', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const Hypertensionvalues = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const HypertensioncolorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      Hypertensionvalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `Hypertension-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': HypertensioncolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'Hypertension', value] // Use the value from the list for the filter
+        });
+
+      });
+
+
+      const MentalHealthvalues = [
+        0, 12, 16, 17, 11, 19, 13, 15, 10, 14
+      ];
+
+      const MentalHealthcolorMap = {
+        "0": "#113B8F",
+        "12": "#1D4398",
+        "16": "#294DA4",
+        "17": "#3858AD",
+        "11": "#4F64BA",
+        "19": "#6577C7",
+        "13": "#7C85D5",
+        "15": "#999FE1",
+        "10": "#B8B9F1",
+        "14": "#D5D7FD"
+      };
+
+      MentalHealthvalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `MentalHealth-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': MentalHealthcolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'MentalHealth', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      const travel_timevalues = [
+        -1, 2, 4, 6, 8, 10, 12, 14, 16
+      ];
+
+      const travel_timecolorMap = {
+        "-1": "#E0E2FF",
+        "2": "#D5D7FD",
+        "4": "#B8B9F1",
+        "6": "#999FE1",
+        "8": "#7C85D5",
+        "10": "#6577C7",
+        "12": "#4F64BA",
+        "14": "#3858AD",
+        "16": "#294DA4"
+      };
+
+      travel_timevalues.forEach((value) => {
+
+        afterMap.addLayer({
+          'id': `travel_time-${value}`, // Use a unique ID for each layer based on the value
+          'type': 'fill',
+          'source': {
+            'type': 'vector',
+            'url': 'mapbox://freyawang123.1niaf3oh'
+          },
+          'source-layer': 'merged_data-7hwu8r',
+          'layout': {
+            //'visibility': 'none' // Set the initial visibility of all layers to 'none'
+          },
+          'paint': {
+            'fill-color': travel_timecolorMap[value], // Adjust the color as needed
+            'fill-opacity': 0.4
+          },
+          'filter': ['>=', 'travel_time', value] // Use the value from the list for the filter
+        });
+
+      });
+
+      function allRightHide() {
+        count_dep3values.forEach((year, index) => {
+          const layerIdDog = `count_dep3-${year}`;
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        count_cancervalues.forEach((year, index) => {
+          const layerIdDog = `count_cancer-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        Anxietyvalues.forEach((year, index) => {
+          const layerIdDog = `Anxiety-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        count_dep4values.forEach((year, index) => {
+          const layerIdDog = `count_dep4-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        count_obesityvalues.forEach((year, index) => {
+          const layerIdDog = `count_obesity-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        Depressionvalues.forEach((year, index) => {
+          const layerIdDog = `Depression-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        Hypertensionvalues.forEach((year, index) => {
+          const layerIdDog = `Hypertension-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        MentalHealthvalues.forEach((year, index) => {
+          const layerIdDog = `MentalHealth-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+        travel_timevalues.forEach((year, index) => {
+          const layerIdDog = `travel_time-${year}`;
+
+          afterMap.setLayoutProperty(layerIdDog, 'visibility', 'none');
+        });
+
+      }
+
+
+
+    });
+    const beforeNavControl = new mapboxgl.NavigationControl({ showCompass: true });
+    beforeMap.addControl(beforeNavControl, 'top-right');
+
+    const afterNavControl = new mapboxgl.NavigationControl({ showCompass: true });
+    afterMap.addControl(afterNavControl, 'top-right');
+
+    const container = '#comparison-container';
+
+    const map = new mapboxgl.Compare(beforeMap, afterMap, container, {});
+
+    const mapWidth = beforeMap.getContainer().offsetWidth;
+
+    // Move the swiper to the rightmost of the screen initially
+    map.setSlider(mapWidth);
+
+
+
+    const chapters = {
+      'baker': {
+        bearing: 27,
+        center: [-0.15591514, 51.51830379],
+        zoom: 15.5,
+        pitch: 20
+      },
+      'aldgate': {
+        duration: 6000,
+        center: [-0.07571203, 51.51424049],
+        bearing: 150,
+        zoom: 15,
+        pitch: 0
+      },
+      'london-bridge': {
+        bearing: 90,
+        center: [-0.08533793, 51.50438536],
+        zoom: 13,
+        speed: 0.6,
+        pitch: 40
+      },
+      'woolwich': {
+        bearing: 90,
+        center: [0.05991101, 51.48752939],
+        zoom: 12.3
+      },
+      'gloucester': {
+        bearing: 45,
+        center: [-0.18335806, 51.49439521],
+        zoom: 15.3,
+        pitch: 20,
+        speed: 0.5
+      },
+      'caulfield-gardens': {
+        bearing: 180,
+        center: [-0.19684993, 51.5033856],
+        zoom: 12.3
+      },
+      'telegraph': {
+        bearing: 90,
+        center: [-0.10669358, 51.51433123],
+        zoom: 17.3,
+        pitch: 40
+      },
+      'charing-cross': {
+        bearing: 90,
+        center: [-0.12416858, 51.50779757],
+        zoom: 14.3,
+        pitch: 20
+      }
+    };
+
+
+    let activeChapterName = 'baker';
+    function setActiveChapter(chapterName) {
+      if (chapterName === activeChapterName) return;
+
+      const chapter = chapters[chapterName];
+      beforeMap.flyTo({
+        center: chapter.center,
+        zoom: chapter.zoom,
+        pitch: chapter.pitch || 0,
+        bearing: chapter.bearing || 0
+      });
+
+      afterMap.flyTo({
+        center: chapter.center,
+        zoom: chapter.zoom,
+        pitch: chapter.pitch || 0,
+        bearing: chapter.bearing || 0
+      });
+
+      document.getElementById(chapterName).classList.add('active');
+      document.getElementById(activeChapterName).classList.remove('active');
+
+      activeChapterName = chapterName;
+    }
+
+
+
+
+    function isElementOnScreen(id) {
+      const element = document.getElementById(id);
+      const bounds = element.getBoundingClientRect();
+      return bounds.top < window.innerHeight && bounds.bottom > 0;
+    }
+
+    // On every scroll event, check which element is on screen
+    document.getElementById("features").onscroll = () => {
+
+      for (const chapterName in chapters) {
+        if (isElementOnScreen(chapterName)) {
+          setActiveChapter(chapterName);
+          break;
+        }
+      }
+    };
+
+    function toggleFeatures() {
+      const features = document.getElementById("features");
+      features.style.display = "none";
+      const overlay = document.getElementById("overlay");
+      const newOverlay = document.getElementById("new-overlay");
+
+      if (features.style.display === "none") {
+        features.style.display = "block";
+        overlay.classList.add('hidden'); // hide the old overlay
+        newOverlay.classList.remove('hidden'); // show the new overlay
+        document.body.style.overflow = 'scroll'; // Show scrollbar of body
+      } else {
+        features.style.display = "none";
+        overlay.classList.remove('hidden'); // show the old overlay
+        newOverlay.classList.add('hidden'); // hide the new overlay
+        document.body.style.overflow = 'visible'; // Hide scrollbar of body
+      }
+    }
+
+
+    // Get the button by its ID
+    const button1 = document.getElementById('toggleFeatures');
+
+    // Add click event listener
+    button1.addEventListener('click', function () {
+      // Move the swiper to the leftmost of the screen
+      map.setSlider(0);
+
+      // Also toggle features
+      toggleFeatures();
+    });
+
+
+    const overlay = document.getElementById('overlay');
+    const panelControl = document.getElementById('panel_control');
+
+    panelControl.addEventListener('click', () => {
+      overlay.classList.toggle('hidden');
+    });
+
+    document.getElementById("back-to-land-use").addEventListener("click", function () {
+      document.getElementById('new-overlay').classList.add('hidden');
+      document.getElementById('overlay').classList.remove('hidden');
+      document.getElementById('features').style.display = 'none'; // Hide features
+      document.body.style.overflow = 'visible'; // Make body scrollbar normal
+
+      // Move the swiper to the rightmost of the screen
+      const mapWidth1 = beforeMap.getContainer().offsetWidth;
+      map.setSlider(mapWidth1);
+    });
+
+
+
+    beforeMap.on('click', (e) => {
+      // ���������ͼҲ���Դ���� 
+      console.log(e.lngLat);
+
+
+      const features = beforeMap.queryRenderedFeatures(e.point);
+
+      // Limit the number of properties we're displaying for
+      // legibility and performance
+      const displayProperties = [
+        'type',
+        'properties',
+        'id',
+        'layer',
+        'source',
+        'sourceLayer',
+        'state'
+      ];
+
+      const displayFeatures = features.map((feat) => {
+        const displayFeat = {};
+        displayProperties.forEach((prop) => {
+          displayFeat[prop] = feat[prop];
+        });
+        return displayFeat;
+      });
+
+      console.log(displayFeatures)
+
+      displayFeatures.forEach((data, index) => {
+        if (data[0])
+          item = date[0]
+        else
+          item = data
+
+        if (item.layer.id === "acc-new-298dio") {
+
+          var LSOA11CD = item.properties.LSOA11CD
+          var time_Cancer = item.properties.time_Cancer
+          var time_dep3 = item.properties.time_dep3
+          var time_dep4 = item.properties.time_dep4
+          var time_mental = item.properties.time_mental
+          var time_obesity = item.properties.time_obesity
+          var travel_time = item.properties.travel_time
+
+          var description = `<strong>LSOA11CD:</strong>${LSOA11CD}<br/><strong>time_Cancer:</strong>${time_Cancer}<br/><strong>time_dep3:</strong>${time_dep3}<br/><strong>time_dep4:</strong>${time_dep4}<br/><strong>time_mental:</strong>${time_mental}<br/><strong>time_obesity:</strong>${time_obesity}<br/>`
+
+          description = `<strong>LSOA11CD:</strong>` + item.properties.LSOA11CD + `<br/><strong>travel_time:</strong>` + item.properties.travel_time + `<br/> `
+          // create the popup
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(description)
+            .addTo(beforeMap);
+        }
+        if (item.layer.id === "final_poi-5qkmxm") {
+
+          var Name = item.properties.Name
+          var Type = item.properties.Type
+
+          var description = `<strong>Name:</strong>${Name}<br/><strong>Type:</strong>${Type}<br/>`
+
+          // create the popup
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(description)
+            .addTo(beforeMap);
+        }
+      })
+
+
+
+
+      // Create a popup, but don't add it to the map yet.
+      // const popup = new mapboxgl.Popup({
+      // closeButton: false,
+      // closeOnClick: false
+      // });
+    })
+
+    afterMap.on('click', (e) => {
+      // ���������ͼҲ���Դ���� 
+      console.log(e.lngLat);
+
+
+      const features = afterMap.queryRenderedFeatures(e.point);
+
+      // Limit the number of properties we're displaying for
+      // legibility and performance
+      const displayProperties = [
+        'type',
+        'properties',
+        'id',
+        'layer',
+        'source',
+        'sourceLayer',
+        'state'
+      ];
+
+      const displayFeatures = features.map((feat) => {
+        const displayFeat = {};
+        displayProperties.forEach((prop) => {
+          displayFeat[prop] = feat[prop];
+        });
+        return displayFeat;
+      });
+
+      console.log(displayFeatures)
+
+      displayFeatures.forEach((data, index) => {
+        if (data[0])
+          item = date[0]
+        else
+          item = data
+        console.log(item)
+
+        if (item.layer.id === "merged-data-7hwu8r") {
+
+          var Anxiety = item.properties.Anxiety
+          var Depression = item.properties.Depression
+          var Hypertension = item.properties.Hypertension
+          var LQ_count = item.properties.LQ_count
+          var LSOA11CD = item.properties.LSOA11CD
+          var MentalHealth = item.properties.MentalHealth
+          var count_cancer = item.properties.count_cancer
+          var count_dep3 = item.properties.count_dep3
+          var count_dep4 = item.properties.count_dep4
+          var count_obesity = item.properties.count_obesity
+          var from_id = item.properties.from_id
+          var mode_count = item.properties.mode_count
+          var pop = item.properties.pop
+          var travel_time = item.properties.travel_time
+
+          var description = `<strong>Anxiety:</strong>${Anxiety}<br/><strong>Depression:</strong>${Depression}<br/><strong>Hypertension:</strong>${Hypertension}<br/><strong>LQ_count:</strong>${LQ_count}<br/><strong>LSOA11CD:</strong>${LSOA11CD}<br/><strong>MentalHealth:</strong>${MentalHealth}<br/><strong>count_cancer:</strong>${count_cancer}<br/><strong>count_dep3:</strong>${count_dep3}<br/><strong>count_dep4:</strong>${count_dep4}<br/><strong>count_obesity:</strong>${count_obesity}<br/><strong>from_id:</strong>${from_id}<br/><strong>mode_count:</strong>${mode_count}<br/><strong>pop:</strong>${pop}<br/><strong>travel_time:</strong>${travel_time}<br/>`
+          //description = `<strong>` + rightCus + `:</strong>` + item.properties[rightCus] + `<br/> `
+          // create the popup
+          new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(description)
+            .addTo(afterMap);
+        }
+
+      })
+
+
+
+
+      // Create a popup, but don't add it to the map yet.
+      // const popup = new mapboxgl.Popup({
+      // closeButton: false,
+      // closeOnClick: false
+      // });
+    })
+
+
+
+
+  </script>
+
+
+</body>
+
+</html>
