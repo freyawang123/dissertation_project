@@ -253,11 +253,11 @@
             <div class="controls">
                 <div class="clearfix">
                     <select id="layer-select">
-                        <option value="mental-2xzr5u" style="color:black;">mental</option>
-                        <option value="LQ-3a6h5i" style="color:black;">lq</option>
-                        <option value="dep3-8zbmzs" style="color:black;">dep3</option>
-                        <option value="dep4-28q6zo" style="color:black;">dep4</option>
-                        <option value="mode-6ka47b" style="color:black;">mode</option>
+                        <option value="mental-2xzr5u" style="color:black;">Health_mental health</option>
+                        <option value="LQ-3a6h5i" style="color:black;">income_lower quartile</option>
+                        <option value="dep3-8zbmzs" style="color:black;">deprivation demission 3</option>
+                        <option value="dep4-28q6zo" style="color:black;">deprivation demission 4</option>
+                        <option value="mode-6ka47b" style="color:black;">income_mode</option>
                         <option value="Obesity-6ukcyy" style="color:black;">Obesity</option>
                         <option value="Cancer-bcqas9" style="color:black;">cancer</option>
                     </select>
@@ -325,705 +325,705 @@
 
 
                 const mentalaccLegendValues = [{
-                        value: "<=0.0004088287",
+                        value: "<=0.000408",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">0.0004088287",
+                        value: ">0.000408",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">0.0011848689",
+                        value: ">0.001184",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">0.0019609091",
+                        value: ">0.001960",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">0.0028189599",
+                        value: ">0.002818",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">0.0034346511",
+                        value: ">0.003434",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">0.0039879163",
+                        value: ">0.003987",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">0.0049904035",
+                        value: ">0.004990",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">0.0062474907",
+                        value: ">0.006247",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">0.0077665221",
+                        value: ">0.007766",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">0.0095780985",
+                        value: ">0.009578",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const mentalDensityLegendValues = [{
-                        value: "<=0.0001077154",
+                        value: "<=0.000107",
                         color: '#E6EBE6'
                     },
                     {
-                        value: ">0.0001077154",
+                        value: ">0.000107",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">0.0001493327",
+                        value: ">0.000149",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">0.0002105346",
+                        value: ">0.000210",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">0.0002558240",
+                        value: ">0.000255",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">0.0003182499",
+                        value: ">0.000318",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">0.0003696595",
+                        value: ">0.000369",
                         color: '#799D7C'
                     },
                     {
-                        value: ">0.0004088287",
+                        value: ">0.000408",
                         color: '#658F67'
                     },
                     {
-                        value: ">0.0004431018",
+                        value: ">0.000443",
                         color: '#528054'
                     },
                     {
-                        value: ">0.0005165441",
+                        value: ">0.000516",
                         color: '#417049'
                     },
                     {
-                        value: ">0.0006328277",
+                        value: ">0.000632",
                         color: '#38623A'
                     },
                 ];
 
                 const CanceraccLegendValues = [{
-                        value: "<=5.385768e-05",
+                        value: "<=0.000053",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">5.385768e-05",
+                        value: ">0.000053",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">4.112768e-04",
+                        value: ">0.000411",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">6.609806e-04",
+                        value: ">0.000660",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">9.792305e-04",
+                        value: ">0.000979",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">1.238727e-03",
+                        value: ">0.001238",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">1.586353e-03",
+                        value: ">0.001586",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">2.056384e-03",
+                        value: ">0.002056",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">2.878938e-03",
+                        value: ">0.002878",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">3.554607e-03",
+                        value: ">0.003554",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">5.728499e-03",
+                        value: ">0.005728",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const CancerDensityLegendValues = [{
-                        value: "<=3.916922e-05",
+                        value: "<=0.000039",
                         color: '#E6EBE6'
                     },
                     {
-                        value: ">3.916922e-05",
+                        value: ">0.000039",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">4.896153e-05",
+                        value: ">0.000048",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">6.364998e-05",
+                        value: ">0.000063",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">7.833844e-05",
+                        value: ">0.000078",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">8.813075e-05",
+                        value: ">0.000088",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">9.792305e-05",
+                        value: ">0.000097",
                         color: '#799D7C'
                     },
                     {
-                        value: ">1.175077e-04",
+                        value: ">0.000117",
                         color: '#658F67'
                     },
                     {
-                        value: ">1.370923e-04",
+                        value: ">0.000137",
                         color: '#528054'
                     },
                     {
-                        value: ">1.664692e-04",
+                        value: ">0.000166",
                         color: '#417049'
                     },
                     {
-                        value: ">2.056384e-04",
+                        value: ">0.000205",
                         color: '#38623A'
                     },
                 ];
 
                 const ObesityaccLegendValues = [{
-                        value: "<=0.0003378345",
+                        value: "<=0.000337",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">0.0003378345",
+                        value: ">0.000337",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">0.0008323459",
+                        value: ">0.000832",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">0.0013023766",
+                        value: ">0.001302",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">0.0018458495",
+                        value: ">0.001845",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">0.0024089071",
+                        value: ">0.002408",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">0.0030551992",
+                        value: ">0.003055",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">0.0036721145",
+                        value: ">0.003672",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">0.0046268642",
+                        value: ">0.004626",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">0.0064776099",
+                        value: ">0.006477",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">0.0085927478",
+                        value: ">0.008592",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const ObesityDensityLegendValues = [{
-                        value: "<=7.833844e-05",
+                        value: "<=0.000078",
                         color: '#E6EBE6'
                     },
                     {
-                        value: ">7.833844e-05",
+                        value: ">0.000078",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">1.175077e-04",
+                        value: ">0.000117",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">1.468846e-04",
+                        value: ">0.000146",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">1.958461e-04",
+                        value: ">0.000195",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">2.497038e-04",
+                        value: ">0.000249",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">2.986653e-04",
+                        value: ">0.000298",
                         color: '#799D7C'
                     },
                     {
-                        value: ">3.280422e-04",
+                        value: ">0.000328",
                         color: '#658F67'
                     },
                     {
-                        value: ">3.672114e-04",
+                        value: ">0.000367",
                         color: '#528054'
                     },
                     {
-                        value: ">4.259653e-04",
+                        value: ">0.000425",
                         color: '#417049'
                     },
                     {
-                        value: ">4.994076e-04",
+                        value: ">0.000499",
                         color: '#38623A'
                     },
                 ];
 
                 const ModeaccLegendValues = [{
-                        value: "<=0.004764426",
+                        value: "<=0.004764",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">0.004764426",
+                        value: ">0.004764",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">0.029115934",
+                        value: ">0.029115",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">0.055584966",
+                        value: ">0.055584",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">0.080995236",
+                        value: ">0.080995",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">0.103229222",
+                        value: ">0.103229",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">0.125992589",
+                        value: ">0.125992",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">0.161990471",
+                        value: ">0.161990",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">0.206987824",
+                        value: ">0.206987",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">0.296982530",
+                        value: ">0.296982",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">0.395976707",
+                        value: ">0.395976",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const ModeDensityLegendValues = [{
-                        value: "<=0.002073407",
+                        value: "<=0.002073",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">0.002073407",
+                        value: ">0.002073",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">0.004235045",
+                        value: ">0.004235",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">0.005293806",
+                        value: ">0.005293",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">0.006881948",
+                        value: ">0.006881",
                         color: '#799D7C'
                     },
                     {
-                        value: ">0.008470090",
+                        value: ">0.008470",
                         color: '#658F67'
                     },
                     {
-                        value: ">0.010058232",
+                        value: ">0.010058",
                         color: '#528054'
                     },
                     {
-                        value: ">0.017204870",
+                        value: ">0.017204",
                         color: '#417049'
                     },
                     {
-                        value: ">0.024925004",
+                        value: ">0.024925",
                         color: '#38623A'
                     },
                 ];
 
                 const Dep3accLegendValues = [{
-                        value: "<=0.0003375599",
+                        value: "<=0.000337",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">0.0003375599",
+                        value: ">0.000337",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">0.0011181670",
+                        value: ">0.001118",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">0.0022152366",
+                        value: ">0.002215",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">0.0033228549",
+                        value: ">0.003322",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">0.0043671807",
+                        value: ">0.004367",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">0.0063292475",
+                        value: ">0.006329",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">0.0085444841",
+                        value: ">0.008544",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">0.0132281272",
+                        value: ">0.013228",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">0.0163505559",
+                        value: ">0.016350",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">0.0174687230",
+                        value: ">0.017468",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const Dep3DensityLegendValues = [{
-                        value: "<=2.109749e-05",
+                        value: "<=0.000021",
                         color: '#E6EBE6'
                     },
                     {
-                        value: ">2.109749e-05",
+                        value: ">0.000021",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">1.265849e-04",
+                        value: ">0.000126",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">2.637186e-04",
+                        value: ">0.000263",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">3.903036e-04",
+                        value: ">0.000390",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">5.168885e-04",
+                        value: ">0.000516",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">6.751197e-04",
+                        value: ">0.000675",
                         color: '#799D7C'
                     },
                     {
-                        value: ">8.017047e-04",
+                        value: ">0.000801",
                         color: '#658F67'
                     },
                     {
-                        value: ">9.810334e-04",
+                        value: ">0.000981",
                         color: '#528054'
                     },
                     {
-                        value: ">1.318593e-03",
+                        value: ">0.001318",
                         color: '#417049'
                     },
                     {
-                        value: ">1.803836e-03",
+                        value: ">0.001803",
                         color: '#38623A'
                     },
                 ];
 
                 const Dep4accLegendValues = [{
-                        value: "<=6.329247e-05",
+                        value: "<=0.000063",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">6.329247e-05",
+                        value: ">0.000063",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: ">2.215237e-04",
+                        value: ">0.000221",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">4.114011e-04",
+                        value: ">0.000411",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">6.645710e-04",
+                        value: ">0.000664",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">9.493871e-04",
+                        value: ">0.000949",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">1.234203e-03",
+                        value: ">0.001234",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">1.582312e-03",
+                        value: ">0.001582",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">1.962067e-03",
+                        value: ">0.001962",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">2.563345e-03",
+                        value: ">0.002563",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const Dep4DensityLegendValues = [{
-                        value: "<=1.054875e-05",
+                        value: "<=0.000010",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">1.054875e-05",
+                        value: ">0.000010",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">3.164624e-05",
+                        value: ">0.000031",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">5.274373e-05",
+                        value: ">0.000052",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">7.384122e-05",
+                        value: ">0.000073",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">1.054875e-04",
+                        value: ">0.000105",
                         color: '#799D7C'
                     },
                     {
-                        value: ">1.265849e-04",
+                        value: ">0.000126",
                         color: '#658F67'
                     },
                     {
-                        value: ">1.582312e-04",
+                        value: ">0.000158",
                         color: '#528054'
                     },
                     {
-                        value: ">2.004262e-04",
+                        value: ">0.000200",
                         color: '#417049'
                     },
                     {
-                        value: ">2.637186e-04",
+                        value: ">0.000263",
                         color: '#38623A'
                     },
                 ];
 
                 const LQaccLegendValues = [{
-                        value: "<=0.004438277",
+                        value: "<=0.004438",
                         color1: '#E1E7F1',
                         color2: '#E6EBE6'
                     },
                     {
-                        value: ">0.004438277",
+                        value: ">0.004438",
                         color1: '#D5D7FC',
                         color2: '#E0F4E9'
                     },
                     {
-                        value: ">0.030321357",
+                        value: ">0.030321",
                         color1: '#B8B9EF',
                         color2: '#CAE2D2'
                     },
                     {
-                        value: "> 0.058352553",
+                        value: ">0.058352",
                         color1: '#999FE1',
                         color2: '#B1D0BD'
                     },
                     {
-                        value: ">0.087571249",
+                        value: ">0.087571",
                         color1: '#7D85D4',
                         color2: '#9EC0A5'
                     },
                     {
-                        value: ">0.109761906",
+                        value: ">0.109761",
                         color1: '#6577CA',
                         color2: '#89AD8D'
                     },
                     {
-                        value: ">0.143867070",
+                        value: ">0.143867",
                         color1: '#4D66BC',
                         color2: '#799D7C'
                     },
                     {
-                        value: ">0.177593853",
+                        value: ">0.177593",
                         color1: '#3857AD',
                         color2: '#658F67'
                     },
                     {
-                        value: ">0.228579739",
+                        value: ">0.228579",
                         color1: '#294DA3',
                         color2: '#528054'
                     },
                     {
-                        value: ">0.279538962",
+                        value: ">0.279538",
                         color1: '#1D4499',
                         color2: '#417049'
                     },
                     {
-                        value: ">0.361405656",
+                        value: ">0.361405",
                         color1: '#113A8F',
                         color2: '#38623A'
                     },
                 ];
 
                 const LQDensityLegendValues = [{
-                        value: "<=0.004036141",
+                        value: "<=0.004036",
                         color: '#E6EBE6'
                     },
                     {
-                        value: ">0.004036141",
+                        value: ">0.004036",
                         color: '#E0F4E9'
                     },
                     {
-                        value: ">0.004581775",
+                        value: ">0.004581",
                         color: '#CAE2D2'
                     },
                     {
-                        value: ">0.005173222",
+                        value: ">0.005173",
                         color: '#B1D0BD'
                     },
                     {
-                        value: ">0.005800787",
+                        value: ">0.005800",
                         color: '#9EC0A5'
                     },
                     {
-                        value: ">0.006479981",
+                        value: ">0.006479",
                         color: '#89AD8D'
                     },
                     {
-                        value: ">0.007203049",
+                        value: ">0.007203",
                         color: '#799D7C'
                     },
                     {
-                        value: ">0.007962962",
+                        value: ">0.007962",
                         color: '#658F67'
                     },
                     {
-                        value: ">0.008793169",
+                        value: ">0.008793",
                         color: '#528054'
                     },
                     {
-                        value: ">0.009512359",
+                        value: ">0.009512",
                         color: '#417049'
                     },
                     {
-                        value: ">0.010329962",
+                        value: ">0.010329",
                         color: '#38623A'
                     },
                 ];
@@ -1046,7 +1046,7 @@
 
                     if (attribute === 'mental-2xzr5u') {
 
-                        legend.innerHTML = '<h3>mental_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index <br/>in mental health</h3>';
                         mentalaccLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1082,7 +1082,7 @@
 
                     }
                     if (attribute === 'LQ-3a6h5i') {
-                        legend.innerHTML = '<h3>LQ_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index in <br/>income_lower quartile</h3>';
                         LQaccLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1117,7 +1117,7 @@
                         });
                     }
                     if (attribute === 'dep3-8zbmzs') {
-                        legend.innerHTML = '<h3>Dep3_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index in <br/>deprivation demission 3</h3>';
                         Dep3accLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1152,7 +1152,7 @@
                         });
                     }
                     if (attribute === 'dep4-28q6zo') {
-                        legend.innerHTML = '<h3>Dep4_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index in <br/>deprivation demission 4</h3>';
                         Dep4accLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1187,7 +1187,7 @@
                         });
                     }
                     if (attribute === 'mode-6ka47b') {
-                        legend.innerHTML = '<h3>Mode_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index <br/>in income_mode</h3>';
                         ModeaccLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1222,7 +1222,7 @@
                         });
                     }
                     if (attribute === 'Obesity-6ukcyy') {
-                        legend.innerHTML = '<h3>Obesity_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index <br/>in Obesity</h3>';
                         ObesityaccLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
@@ -1257,7 +1257,7 @@
                         });
                     }
                     if (attribute === 'Cancer-bcqas9') {
-                        legend.innerHTML = '<h3>Cancer_acc</h3>';
+                        legend.innerHTML = '<h3>accessibility index <br/>in Cancer</h3>';
                         CanceraccLegendValues.forEach((item) => {
                             let key1 = document.createElement('span');
                             key1.className = 'legend-key';
