@@ -447,7 +447,7 @@
       ];
 
       const time_CancercolorMap = {
-        "-1": "#E0E2FF",
+        "0": "#E0E2FF",
         "0.0002692884": "#D5D7FD",
         "0.0004700306": "#B8B9F1",
         "0.0006511883": "#999FE1",
@@ -566,7 +566,7 @@
       ];
 
       const time_mentalcolorMap = {
-        "-1": "#E0E2FF",
+        "0": "#E0E2FF",
         "0.0008396902": "#D5D7FD",
         "0.0012938083": "#B8B9F1",
         "0.0018654341": "#999FE1",
@@ -605,7 +605,7 @@
       ];
 
       const time_obesitycolorMap = {
-        "-1": "#E0E2FF",
+        "0": "#E0E2FF",
         "0.0005483691": "#D5D7FD",
         "0.0009547498": "#B8B9F1",
         "0.0013023766": "#999FE1",
@@ -826,19 +826,27 @@
       function updateLegend(attribute) {
         let legend = document.getElementById('legend');
         legend.innerHTML = '';
-
-
-        // legend.innerHTML = `<h3>${attribute}</h3>`;
+let index=0;
         for (var item in time_CancercolorMap) {
-          console.log(item)
           let key1 = document.createElement('span');
           key1.className = 'legend-key';
           key1.style.backgroundColor = time_CancercolorMap[item];
 
+          let key2= document.createElement('span');
+          key2.style.float = 'right';
+          if(index==0){
+            key2.innerHTML = '<='+parseFloat(Object.keys(time_CancercolorMap)[1]).toFixed(6) ;
+          }
+          else{
+            key2.innerHTML = '>'+parseFloat(item).toFixed(6) ;
+
+          }
 
           let legendItem = document.createElement('div');
           legendItem.appendChild(key1);
+          legendItem.appendChild(key2);
           legend.appendChild(legendItem);
+          index++;
         }
 
       }
@@ -1260,7 +1268,7 @@
       ];
 
       const travel_timecolorMap = {
-        "-1": "#E0E2FF",
+        "0": "#E0E2FF",
         "2": "#D5D7FD",
         "4": "#B8B9F1",
         "6": "#999FE1",
